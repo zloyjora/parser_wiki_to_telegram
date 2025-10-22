@@ -10,7 +10,7 @@ from telegram_bot.handlers.command_handlers import register_handlers
 def main() -> None:
     try:
         load_dotenv()
-        bot_token = os.getenv('TOKEN')
+        bot_token = os.getenv('TG_BOT_TOKEN')
         if not bot_token:
             print(f'Токен не обнаружен')
             return
