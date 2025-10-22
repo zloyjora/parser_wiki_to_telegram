@@ -57,8 +57,8 @@ def register_handlers(bot):
         except requests.exceptions.RequestException as e:
             bot.send_message(message.chat.id, f'Ошибка при обращении к сервису.')
             return None
-        except requests.exceptions.V as e:
-            bot.send_message(message.chat.id, f'Ошибка при обращении к сервису.')
+        except ValueError as e:
+            bot.send_message(message.chat.id, f'Ошибка значения: {e}')
             return None
         except Exception as e:
             bot.send_message(message.chat.id, f'Непредвиденная ошибка: {e}')
