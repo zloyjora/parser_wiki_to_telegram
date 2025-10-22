@@ -8,23 +8,19 @@ from telegram_bot.handlers.command_handlers import register_handlers
 
 
 def main() -> None:
-    """
-    Запускает бота.
-    
-    TODO:
-        1. Загрузи .env файл
-        2. Получи токен из переменной окружения
-        3. Проверь, что токен не пустой
-        4. Создай экземпляр бота
-        5. Зарегистрируй обработчики команд
-        6. Выведи сообщение о запуске
-        7. Запусти бота
-        8. Оберни создание и запуск бота в try/except
-    """
-    raise NotImplementedError(
-        "Реализуй функцию main() согласно заданию"
-    )
+    try:
+        load_dotenv()
+        TOKEN = os.getenv('TOKEN')
+        if not TOKEN:
+            print(f'Токен не обнаружен')
+            return
+        bot = telebot.TeleBot(TOKEN)
+        register_handlers(bot)
+        print(f'Бот запущен')
 
+        bot.polling()
+    except Exception as e:
+        print(f'Непредвиденная ошибка: {e}')
 
 if __name__ == "__main__":
     main()

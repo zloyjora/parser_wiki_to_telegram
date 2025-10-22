@@ -11,50 +11,107 @@ class WikipediaClient:
     HEADERS = {
         "User-Agent": "Mozilla/5.0"
     }
+    TIMEOUT = 10
 
     def _make_request(self, params, url: str | None = None):
-        """
-        Внутренний метод для выполнения запроса к Wikipedia API.
-        """
+        try:
+            response = requests.get(url=url, params=params, headers=self.HEADERS, timeout=self.TIMEOUT)
+            response.raise_for_status()
+            return response.json()
+        except requests.ConnectionError as e:
+            print(f'Ошибка подключения: {e}')
+            return None
+        except requests.Timeout as e:
+            print(f'Время ожидания превышено: {e}')
+            return None
+        except requests.HTTPError as e:
+            print(f'Ошибка HTTP: {e}')
+            return None
 
         pass
 
     def get_summary(self, term, lang="ru", chars=500):
-        """
-        Получает краткое содержание статьи из Wikipedia по заданному термину.
+        url = f'https://{lang}.wikipedia.org/w/api.php'
+        params = {
+            "action": "query",
+            "format": "json",
+            "prop": "extracts",
+            "exintro": True,
+            "explaintext": True,
+            "redirects": 1,
+            "titles": term
+        }
 
-        Args:
-            term: Термин для поиска.
-            lang: Язык Wikipedia (например, 'ru' для русской, 'en' для английской).
-            chars: Максимальное количество символов в кратком содержании.
+        data = self._make_request(params=params, url=url)
+        if not data:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        
+        pages = data.get("query", {}).get("pages", {})
+        if not pages or '-1' in pages:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        else:
+            for content in pages.values():
+                extract = content.get("extract")
+                if extract:
+                    return extract[:chars]
+            return None
 
-        Returns:
-            Краткое содержание статьи или None, если статья не найдена или произошла ошибка.
-        """
         pass
 
     def get_full_article(self, term, lang="ru"):
-        """
-        Получает полный текст статьи из Wikipedia по заданному термину.
+        url = f'https://{lang}.wikipedia.org/w/api.php'
+        params = {
+            "action": "query",
+            "format": "json",
+            "prop": "extracts",
+            "exintro": False,
+            "explaintext": True,
+            "redirects": 1,
+            "titles": term
+        }
 
-        Args:
-            term: Термин для поиска.
-            lang: Язык Wikipedia.
-
-        Returns:
-            Полный текст статьи или None.
-        """
+        data = self._make_request(params=params, url=url)
+        if not data:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        
+        pages = data.get("query", {}).get("pages", {})
+        if not pages or '-1' in pages:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        else:
+            for content in pages.values():
+                extract = content.get("extract")
+                if extract:
+                    return extract
+            return None
         pass
 
     def get_article_url(self, term: str, lang="ru"):
-        """
-        Получает прямую ссылку на статью Wikipedia по заданному термину.
-
-        Args:
-            term: Термин для поиска.
-            lang: Язык Wikipedia.
-
-        Returns:
-            URL статьи или None.
-        """
+        url = f'https://{lang}.wikipedia.org/w/api.php'
+        params = {
+            "action": "query",
+            "format": "json",
+            "prop": "info",
+            "inprop": "url",
+            "redirects": 1,
+            "titles": term
+        }
+        data = self._make_request(params=params, url=url)
+        if not data:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        
+        pages = data.get("query", {}).get("pages", {})
+        if not pages or '-1' in pages:
+            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            return None
+        else:
+            for content in pages.values():
+                fullurl = content.get("fullurl")
+                if fullurl:
+                    return fullurl
+            return None
         pass

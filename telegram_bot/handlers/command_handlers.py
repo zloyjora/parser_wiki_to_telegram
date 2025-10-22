@@ -19,32 +19,40 @@ def register_handlers(bot):
     
     @bot.message_handler(commands=['start'])
     def start_command(message):
-        """
-        Обработчик команды /start.
-        
-        TODO:
-            Отправь приветственное сообщение с помощью bot.send_message()
-            Подскажи пользователю, как использовать бота.
-            Пример: "Привет! Я Умный Справочник. Чтобы получить определение, 
-                     используйте команду /wiki <термин>. Например: /wiki Интеграл"
-        """
-        raise NotImplementedError("Реализуй обработчик команды /start")
-    
+        bot.send_message(message.chat.id, "Привет! Я Умный Справочник. \
+        Чтобы получить определение, используйте команду /wiki \
+        <термин>. Например: /wiki Интеграл")    
+
     @bot.message_handler(commands=['help'])
+
     def help_command(message):
-        """
-        Обработчик команды /help.
-        
-        TODO:
-            Отправь справку по использованию бота.
-            Покажи примеры команд.
-            Пример: "Я могу найти краткое определение по любому термину из Wikipedia.
-                     Просто используйте команду /wiki <термин>.\nПример: /wiki Эйлер"
-        """
-        raise NotImplementedError("Реализуй обработчик команды /help")
+        bot.send_message(message.chat.id, 'Я могу найти краткое определение\
+        по любому термину из Wikipedia.Просто используйте \
+        команду /wiki <термин>.\nПример: /wiki Эйлер')
+
     
+
     @bot.message_handler(commands=['wiki'])
+
     def wiki_command(message):
+        text = message.text.split(maxsplit = 1)
+        try:
+            if not text[1]:
+                print(f'Пожалуйста, укажите термин для поиска. Например: /wiki Интеграл')
+            response = wikipedia_client.get_summary(text[1])
+            if response:
+                bot.send_message(message.chat.id, response)
+            else:
+                bot.send_message(message.chat.id, f"Термин '{text[1]}' не найден в Wikipedia.")
+        except TimeoutError as e:
+            bot.send_message(message.chat.id, f'Время ожидания превышено: {e}')
+            return None
+        except ConnectionError as e:
+            bot.send_message(message.chat.id, f'Ошибка подключения: {e}')
+            return None
+        except Exception as e:
+            bot.send_message(message.chat.id, f'mistake {e}')
+            return None
         """
         Обработчик команды /wiki.
         
@@ -58,14 +66,13 @@ def register_handlers(bot):
                - Если summary == None -> отправь "Термин '{term}' не найден в Wikipedia."
             5. Обработай исключения
         """
-        raise NotImplementedError("Реализуй обработчик команды /wiki")
     
     @bot.message_handler(func=lambda message: message.text.startswith('/'))
     def unknown_command(message):
+        bot.send_message(message.chat.id, 'Неизвестная команда. Используйте /wiki <термин>.')
         """
         Обработчик неизвестных команд (любая команда, начинающаяся с /).
 
         TODO:
             Отправь сообщение: "Неизвестная команда. Используйте /wiki <термин>."
         """
-        raise NotImplementedError("Реализуй обработчик неизвестных команд")
