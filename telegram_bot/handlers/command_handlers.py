@@ -10,7 +10,7 @@ def register_handlers(bot):
     Регистрирует все обработчики команд для бота.
     
     Args:
-        bot: Экземпляр telebot.TeleBot
+        bot: Экземпляр telebot.Tele
     
     TODO:
         Реализуй все обработчики команд внутри этой функции.
