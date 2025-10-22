@@ -10,11 +10,11 @@ from telegram_bot.handlers.command_handlers import register_handlers
 def main() -> None:
     try:
         load_dotenv()
-        TOKEN = os.getenv('TOKEN')
-        if not TOKEN:
+        bot_token = os.getenv('TOKEN')
+        if not bot_token:
             print(f'Токен не обнаружен')
             return
-        bot = telebot.TeleBot(TOKEN)
+        bot = telebot.TeleBot(bot_token)
         register_handlers(bot)
         print(f'Бот запущен')
 

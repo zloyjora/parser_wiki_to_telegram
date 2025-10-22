@@ -37,8 +37,7 @@ def register_handlers(bot):
     def wiki_command(message):
         text = message.text.split(maxsplit = 1)
         if len(text) < 2:
-            bot.send_message(message.chat.id, 'Пожалуйста, укажите\
-термин для поиска. Например: /wiki Интеграл')
+            bot.send_message(message.chat.id, 'Пожалуйста, укажите термин для поиска. Например: /wiki Интеграл')
             return
         try:
             response = wikipedia_client.get_summary(text[1])
