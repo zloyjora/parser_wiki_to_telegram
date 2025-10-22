@@ -45,11 +45,17 @@ def register_handlers(bot):
                 bot.send_message(message.chat.id, response)
             else:
                 bot.send_message(message.chat.id, f"Термин '{text[1]}' не найден в Wikipedia.")
-        except TimeoutError as e:
+        except requests.exceptions.Timeout as e:
             bot.send_message(message.chat.id, f'Время ожидания превышено: {e}')
             return None
-        except ConnectionError as e:
+        except requests.exceptions.ConnectionError as e:
             bot.send_message(message.chat.id, f'Ошибка подключения: {e}')
+            return None
+        except requests.exceptions.HTTPError as e:
+            bot.send_message(message.chat.id, f'Ошибка сервера: {e}')
+            return None
+        except requests.exceptions.RequestException as e:
+            bot.send_message(message.chat.id, f'Ошибка при выполнении запроса: {e}')
             return None
         except Exception as e:
             bot.send_message(message.chat.id, f'Непредвиденная ошибка: {e}')
