@@ -36,9 +36,11 @@ def register_handlers(bot):
 
     def wiki_command(message):
         text = message.text.split(maxsplit = 1)
+        if len(text) < 2:
+            bot.send_message(message.chat.id, 'Пожалуйста, укажите\
+термин для поиска. Например: /wiki Интеграл')
+            return
         try:
-            if not text[1]:
-                print(f'Пожалуйста, укажите термин для поиска. Например: /wiki Интеграл')
             response = wikipedia_client.get_summary(text[1])
             if response:
                 bot.send_message(message.chat.id, response)
@@ -51,11 +53,11 @@ def register_handlers(bot):
             bot.send_message(message.chat.id, f'Ошибка подключения: {e}')
             return None
         except Exception as e:
-            bot.send_message(message.chat.id, f'mistake {e}')
+            bot.send_message(message.chat.id, f'Непредвиденная ошибка: {e}')
             return None
         """
         Обработчик команды /wiki.
-        
+        а
         TODO:
             1. Извлеки термин
             2. Если термин не указан:
