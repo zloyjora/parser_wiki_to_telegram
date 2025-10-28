@@ -114,4 +114,3 @@ class WikipediaClient:
                 if fullurl:
                     return fullurl
             return None
-        pass
