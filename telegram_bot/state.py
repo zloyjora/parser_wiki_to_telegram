@@ -15,8 +15,8 @@ def get_user_state(chat_id: int) -> dict:
 
 
 def update_user_state(chat_id: int, **kwargs) -> None:
-    if chat_id in user_states:
-        user_states[chat_id].update(kwargs)
+        if chat_id in user_states:
+            user_states[chat_id].update(kwargs)
 
 
 def clear_user_state(chat_id: int) -> None:

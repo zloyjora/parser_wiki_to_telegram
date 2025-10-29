@@ -38,7 +38,7 @@ def register_handlers(bot):
                 update_user_state(chat_id, article_url = article_url)
 
                 markup = _keyboard(state)
-                
+
                 last_message_id = bot.send_message(chat_id, response, reply_markup = markup).message_id
 
                 update_user_state(
@@ -82,15 +82,22 @@ def register_handlers(bot):
 
 def _cut(text: str | None) -> str:
     MAX_LEN = 3900
-    text = text[:MAX_LEN] + "…" if len(text) > MAX_LEN else text
+    if text:
+        text = text[:MAX_LEN] + "…" if len(text) > MAX_LEN else text
     return text
 
 
 def _keyboard(state: dict) -> types.InlineKeyboardMarkup:
     markup = types.InlineKeyboardMarkup()
-    key1 = types.InlineKeyboardButton('Подробнее / Кратко', callback_data='wiki:switch')
-    markup.add(key1)
-    if state.get('article_url'):
-        key2 = types.InlineKeyboardButton('Читать в Wikipedia', url = state.get('article_url'))
+    mode = state.get('display_mode')
+    if mode == 'summary':
+        key1 = types.InlineKeyboardButton('Подробнее', callback_data='wiki:full')
+        markup.add(key1)
+    elif mode == 'full':
+        key2 = types.InlineKeyboardButton('Кратко', callback_data='wiki:summary')
         markup.add(key2)
+
+    if state.get('article_url'):
+        key3 = types.InlineKeyboardButton('Читать в Wikipedia', url = state.get('article_url'))
+        markup.add(key3)
     return markup
