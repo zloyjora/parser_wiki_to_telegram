@@ -34,6 +34,11 @@ def register_handlers(bot):
                 full_text = _cut(wikipedia_client.get_full_article(text[1]))
                 article_url = wikipedia_client.get_article_url(text[1])
 
+                state = get_user_state(chat_id)
+                markup = _keyboard(state)
+
+                last_message_id = bot.send_message(chat_id, response, reply_markup = markup).message_id
+
                 update_user_state(
                     chat_id,
                     last_term = text[1],
@@ -41,13 +46,6 @@ def register_handlers(bot):
                     summary_text = response,
                     full_text = full_text,
                     article_url = article_url,
-                )
-                state = get_user_state(chat_id)
-                markup = _keyboard(state)
-                last_message_id = bot.send_message(chat_id, response, reply_markup = markup).message_id
-
-                update_user_state(
-                    chat_id,
                     last_message_id = last_message_id
                 )
 
