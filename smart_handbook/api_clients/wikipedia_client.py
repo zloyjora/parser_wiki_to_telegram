@@ -28,7 +28,6 @@ class WikipediaClient:
             print(f'Ошибка HTTP: {e}')
             return None
 
-        pass
 
     def get_summary(self, term, lang="ru", chars=500):
         url = f'https://{lang}.wikipedia.org/w/api.php'
@@ -58,7 +57,6 @@ class WikipediaClient:
                     return extract[:chars]
             return None
 
-        pass
 
     def get_full_article(self, term, lang="ru"):
         url = f'https://{lang}.wikipedia.org/w/api.php'
@@ -87,7 +85,7 @@ class WikipediaClient:
                 if extract:
                     return extract
             return None
-        pass
+
 
     def get_article_url(self, term: str, lang="ru"):
         url = f'https://{lang}.wikipedia.org/w/api.php'

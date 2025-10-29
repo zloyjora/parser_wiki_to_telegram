@@ -21,28 +21,26 @@ def register_callback_handlers(bot):
         
         if state.get('last_message_id') != message_id:
             bot.answer_callback_query(call.id, "Истекло состояние")
-            return
-        
-        current_mode = state.get('display_mode', 'summary')
-        new_mode = 'full' if current_mode == 'summary' else 'summary'
-        
-        update_user_state(chat_id, display_mode=new_mode)
-        
-        if new_mode == 'full':
-            new_text = state.get('full_text')
         else:
-            new_text = state.get('summary_text')
-        
-        updated_state = get_user_state(chat_id)
-        new_markup = _keyboard(updated_state) 
-        
-        try:
-            bot.edit_message_text(
-                chat_id=chat_id,
-                message_id=message_id,
-                text=new_text,
-                reply_markup=new_markup
-            )
-        except Exception as e:
-            bot.answer_callback_query(call.id, "Ошибка при обновлении")
-        
+            current_mode = state.get('display_mode', 'summary')
+            new_mode = 'full' if current_mode == 'summary' else 'summary'
+            
+            update_user_state(chat_id, display_mode=new_mode)
+            
+            if new_mode == 'full':
+                new_text = state.get('full_text')
+            else:
+                new_text = state.get('summary_text')
+            
+            updated_state = get_user_state(chat_id)
+            new_markup = _keyboard(updated_state) 
+            
+            try:
+                bot.edit_message_text(
+                    chat_id=chat_id,
+                    message_id=message_id,
+                    text=new_text,
+                    reply_markup=new_markup
+                )
+            except Exception as e:
+                bot.answer_callback_query(call.id, "Ошибка при обновлении")

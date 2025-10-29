@@ -55,6 +55,7 @@ def register_handlers(bot):
 
             else:
                 bot.send_message(message.chat.id, f"Термин '{text[1]}' не найден в Wikipedia.")
+                return None
         except requests.exceptions.Timeout as e:
             bot.send_message(message.chat.id, f'Время ожидания превышено: {e}')
             return None
@@ -84,7 +85,8 @@ def _cut(text: str | None) -> str:
     MAX_LEN = 3900
     if text:
         text = text[:MAX_LEN] + "…" if len(text) > MAX_LEN else text
-    return text
+        return text
+    return None
 
 
 def _keyboard(state: dict) -> types.InlineKeyboardMarkup:
