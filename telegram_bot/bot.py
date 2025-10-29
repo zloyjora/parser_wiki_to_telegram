@@ -21,7 +21,7 @@ def main() -> None:
 
         bot.polling()
     except Exception as e:
-        print(f'Непредвиденная ошибка: {e}')
+        print(f'Непредвиденная ошибка: токен не работает с ботом: {e}')
 
 if __name__ == "__main__":
     main()
