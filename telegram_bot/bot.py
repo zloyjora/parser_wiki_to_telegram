@@ -5,7 +5,7 @@ import telebot
 from dotenv import load_dotenv
 
 from telegram_bot.handlers.command_handlers import register_handlers
-
+from telegram_bot.handlers.callback_handlers import register_callback_handlers
 
 def main() -> None:
     try:
@@ -16,6 +16,7 @@ def main() -> None:
             return
         bot = telebot.TeleBot(bot_token)
         register_handlers(bot)
+        register_callback_handlers(bot)
         print(f'Бот запущен')
 
         bot.polling()

@@ -3,9 +3,6 @@ from smart_handbook.api_clients.wikipedia_client import WikipediaClient
 from telegram_bot.state import get_user_state, update_user_state
 from telebot import types
 
-
-
-# Создаём экземпляр клиента Wikipedia
 wikipedia_client = WikipediaClient()
 
 def register_handlers(bot):
@@ -31,22 +28,12 @@ def register_handlers(bot):
             bot.send_message(message.chat.id, 'Пожалуйста, укажите термин для поиска. Например: /wiki Интеграл')
             return
         try:
-            response = wikipedia_client.get_summary(text[1])
+            response = wikipedia_client.get_summary(text[1]) 
             if response:
-
                 chat_id = message.chat.id
-
                 full_text = _cut(wikipedia_client.get_full_article(text[1]))
                 article_url = wikipedia_client.get_article_url(text[1])
 
-                # update_user_state(chat_id, last_term = text[1])
-                # update_user_state(chat_id, summary_text = response)
-                # if wikipedia_client.get_article_url(text[1]):
-                #     update_user_state(chat_id, article_url = wikipedia_client.get_article_url(text[1]))
-                # if wikipedia_client.get_full_article(text[1]):
-                #     update_user_state(chat_id, full_text = wikipedia_client.get_full_article(text[1]))
-                # state = get_user_state(chat_id)
-                # bot.send_message(chat_id, response, rep)
                 update_user_state(
                     chat_id,
                     last_term = text[1],
@@ -54,15 +41,11 @@ def register_handlers(bot):
                     summary_text = response,
                     full_text = full_text,
                     article_url = article_url,
-                    # last_message_id = message.message_id
                 )
                 state = get_user_state(chat_id)
-                
                 markup = _keyboard(state)
-
-                # bot.send_message(chat_id, response, reply_markup = markup)
-                
                 last_message_id = bot.send_message(chat_id, response, reply_markup = markup).message_id
+
                 update_user_state(
                     chat_id,
                     last_message_id = last_message_id
@@ -98,14 +81,12 @@ def register_handlers(bot):
 
 
 def _cut(text: str | None) -> str:
-    """Обрезает текст до MAX_LEN символов."""
     MAX_LEN = 3900
     text = text[:MAX_LEN] + "…" if len(text) > MAX_LEN else text
     return text
 
 
 def _keyboard(state: dict) -> types.InlineKeyboardMarkup:
-    """Создает клавиатуру с инлайн-кнопками."""
     markup = types.InlineKeyboardMarkup()
     key1 = types.InlineKeyboardButton('Подробнее / Кратко', callback_data='wiki:switch')
     markup.add(key1)
@@ -113,11 +94,3 @@ def _keyboard(state: dict) -> types.InlineKeyboardMarkup:
         key2 = types.InlineKeyboardButton('Читать в Wikipedia', url = state.get('article_url'))
         markup.add(key2)
     return markup
-
-
-    # TODO:
-    # 1. Создай объект клавиатуры
-    # 2. Определи текст кнопки переключения
-    # 3. Создай кнопку переключения:
-    # 4. Если есть URL статьи, создай кнопку ссылки
-    # 5. Верни markup
