@@ -98,7 +98,6 @@ def _keyboard(state: dict) -> types.InlineKeyboardMarkup:
     elif mode == 'full':
         key2 = types.InlineKeyboardButton('Кратко', callback_data='wiki:summary')
         markup.add(key2)
-
     if state.get('article_url'):
         key3 = types.InlineKeyboardButton('Читать в Wikipedia', url = state.get('article_url'))
         markup.add(key3)
