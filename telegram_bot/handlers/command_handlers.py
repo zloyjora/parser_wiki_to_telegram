@@ -26,7 +26,7 @@ def register_handlers(bot):
         text = message.text.split(maxsplit = 1)
         if len(text) < 2:
             bot.send_message(message.chat.id, 'Пожалуйста, укажите термин для поиска. Например: /wiki Интеграл')
-            return
+            return None
         try:
             response = wikipedia_client.get_summary(text[1]) 
             if response:
