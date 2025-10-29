@@ -19,13 +19,13 @@ class WikipediaClient:
             response.raise_for_status()
             return response.json()
         except requests.ConnectionError as e:
-            print(f'Ошибка подключения: {e}')
+            # print(f'Ошибка подключения: {e}')
             return None
         except requests.Timeout as e:
-            print(f'Время ожидания превышено: {e}')
+            # print(f'Время ожидания превышено: {e}')
             return None
         except requests.HTTPError as e:
-            print(f'Ошибка HTTP: {e}')
+            # print(f'Ошибка HTTP: {e}')
             return None
 
 
@@ -43,12 +43,12 @@ class WikipediaClient:
 
         data = self._make_request(params=params, url=url)
         if not data:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         
         pages = data.get("query", {}).get("pages", {})
         if not pages or '-1' in pages:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         else:
             for content in pages.values():
@@ -72,12 +72,12 @@ class WikipediaClient:
 
         data = self._make_request(params=params, url=url)
         if not data:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         
         pages = data.get("query", {}).get("pages", {})
         if not pages or '-1' in pages:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         else:
             for content in pages.values():
@@ -99,12 +99,12 @@ class WikipediaClient:
         }
         data = self._make_request(params=params, url=url)
         if not data:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         
         pages = data.get("query", {}).get("pages", {})
         if not pages or '-1' in pages:
-            print(f'Определение по запросу {term} на языке {lang} не найдено')
+            # print(f'Определение по запросу {term} на языке {lang} не найдено')
             return None
         else:
             for content in pages.values():
