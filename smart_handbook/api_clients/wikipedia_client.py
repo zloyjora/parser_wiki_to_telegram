@@ -56,6 +56,7 @@ class WikipediaClient:
                 if extract:
                     return extract[:chars]
             return None
+        
 
 
     def get_full_article(self, term, lang="ru"):
